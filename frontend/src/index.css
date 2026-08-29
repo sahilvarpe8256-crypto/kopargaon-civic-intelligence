@@ -1,0 +1,210 @@
+/* ==========================================================================
+   KOPARGAON CIVIC INTELLIGENCE - DESIGN SYSTEM & TOKENS
+   Civic, Trustworthy, Modern, Accessible Public Service UI
+   ========================================================================== */
+
+:root {
+  /* Brand & Municipal Civic Palette */
+  --civic-primary: #0f766e;         /* Deep Municipal Teal/Emerald */
+  --civic-primary-hover: #0d635c;
+  --civic-primary-light: #ccfbf1;
+  --civic-primary-dark: #115e59;
+  
+  --civic-navy: #0f172a;            /* Municipal Slate Navy */
+  --civic-navy-surface: #1e293b;
+  --civic-navy-muted: #334155;
+  
+  --civic-accent: #0284c7;           /* Sky Blue Accent */
+  --civic-accent-light: #e0f2fe;
+
+  /* Neutral Backgrounds & Surfaces */
+  --bg-app: #f8fafc;                /* Very soft slate background */
+  --bg-surface: #ffffff;            /* Pure white cards */
+  --bg-surface-subtle: #f1f5f9;     /* Subtle container background */
+  --bg-surface-elevated: #ffffff;
+  
+  /* Text & Typography */
+  --text-primary: #0f172a;          /* Slate 900 */
+  --text-secondary: #475569;        /* Slate 600 */
+  --text-muted: #64748b;            /* Slate 500 */
+  --text-inverse: #ffffff;
+  
+  /* Border & Dividers */
+  --border-subtle: #e2e8f0;         /* Slate 200 */
+  --border-default: #cbd5e1;        /* Slate 300 */
+  --border-focus: #0f766e;
+  
+  /* Civic Status Colors */
+  --status-pending: #64748b;        /* Slate */
+  --status-pending-bg: #f1f5f9;
+  --status-ai: #0284c7;             /* Info Blue */
+  --status-ai-bg: #e0f2fe;
+  --status-review: #d97706;         /* Amber */
+  --status-review-bg: #fef3c7;
+  --status-approved: #16a34a;       /* Green */
+  --status-approved-bg: #dcfce7;
+  --status-deferred: #ca8a04;       /* Mustard/Yellow */
+  --status-deferred-bg: #fef9c3;
+  --status-manual: #ea580c;         /* Orange */
+  --status-manual-bg: #ffedd5;
+  --status-rejected: #dc2626;       /* Red */
+  --status-rejected-bg: #fee2e2;
+
+  /* Typography System */
+  --font-family-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-family-body: 'Inter', system-ui, -apple-system, sans-serif;
+  
+  /* Elevation Shadows */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.08);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.08);
+
+  /* Border Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base Styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family-body);
+  color: var(--text-primary);
+  background-color: var(--bg-app);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-heading);
+  color: var(--text-primary);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+h1 { font-size: clamp(1.875rem, 4vw, 2.5rem); }
+h2 { font-size: clamp(1.5rem, 3vw, 2rem); }
+h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); }
+h4 { font-size: 1.125rem; }
+
+p {
+  color: var(--text-secondary);
+}
+
+a {
+  color: var(--civic-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--civic-primary-hover);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  transition: all var(--transition-fast);
+}
+
+/* Accessibility: Focus States */
+:focus-visible {
+  outline: 2px solid var(--civic-primary);
+  outline-offset: 2px;
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Container Utilities */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+/* Common Badge */
+.civic-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Common Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: var(--civic-primary);
+  color: var(--text-inverse);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+  background-color: var(--civic-primary-hover);
+  color: var(--text-inverse);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-surface-subtle);
+  border-color: var(--border-focus);
+}

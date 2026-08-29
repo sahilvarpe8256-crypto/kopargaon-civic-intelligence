@@ -1,0 +1,111 @@
+.not-found-page-container {
+  min-height: calc(100vh - 160px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem;
+}
+
+.not-found-card {
+  background-color: var(--bg-surface);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 3rem 2.5rem;
+  max-width: 580px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.not-found-badge-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-full);
+  background-color: var(--civic-primary-light);
+  color: var(--civic-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.not-found-code {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: var(--civic-navy);
+  line-height: 1;
+  font-family: monospace;
+  margin-bottom: 0.5rem;
+}
+
+.not-found-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--civic-navy);
+  margin: 0 0 0.75rem 0;
+}
+
+.not-found-desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0 0 2rem 0;
+}
+
+.not-found-actions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.nf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.nf-btn-primary {
+  background-color: var(--civic-primary);
+  color: white;
+}
+
+.nf-btn-primary:hover {
+  background-color: var(--civic-primary-dark);
+}
+
+.nf-btn-secondary {
+  background-color: var(--bg-surface-subtle);
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
+}
+
+.nf-btn-secondary:hover {
+  background-color: white;
+  border-color: var(--civic-primary);
+}
+
+.nf-btn-admin {
+  background-color: var(--civic-navy);
+  color: white;
+}
+
+.nf-btn-admin:hover {
+  background-color: #0b1120;
+}
+
+@media (max-width: 540px) {
+  .not-found-actions-grid {
+    grid-template-columns: 1fr;
+  }
+}

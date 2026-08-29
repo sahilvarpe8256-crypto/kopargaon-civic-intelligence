@@ -1,0 +1,113 @@
+.report-progress-container {
+  margin-bottom: 2rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-xs);
+}
+
+.progress-track {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.progress-step {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  position: relative;
+  z-index: 2;
+  cursor: default;
+}
+
+.progress-step.clickable {
+  cursor: pointer;
+}
+
+.progress-step.clickable:hover .step-circle {
+  transform: scale(1.08);
+  border-color: var(--civic-primary);
+}
+
+.step-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-surface-subtle);
+  border: 2px solid var(--border-default);
+  color: var(--text-muted);
+  font-weight: 700;
+  transition: all var(--transition-fast);
+}
+
+.progress-step.active .step-circle {
+  background-color: var(--civic-primary);
+  border-color: var(--civic-primary);
+  color: var(--text-inverse);
+  box-shadow: 0 0 0 4px var(--civic-primary-light);
+}
+
+.progress-step.completed .step-circle {
+  background-color: var(--status-approved-bg);
+  border-color: var(--status-approved);
+  color: var(--status-approved);
+}
+
+.step-label-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.step-count {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.progress-step.active .step-count {
+  color: var(--civic-primary);
+}
+
+.step-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.progress-step.active .step-name {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.progress-line {
+  flex: 1;
+  height: 3px;
+  background-color: var(--border-subtle);
+  margin: 0 0.75rem;
+  transition: background-color var(--transition-normal);
+}
+
+.progress-line.filled {
+  background-color: var(--status-approved);
+}
+
+@media (max-width: 768px) {
+  .report-progress-container {
+    padding: 0.875rem 1rem;
+  }
+  .step-label-group {
+    display: none;
+  }
+  .step-circle {
+    width: 32px;
+    height: 32px;
+  }
+}

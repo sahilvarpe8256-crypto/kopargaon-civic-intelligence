@@ -1,0 +1,35 @@
+.civic-priority-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.priority-badge-critical {
+  background-color: var(--status-rejected-bg);
+  color: var(--status-rejected);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.priority-badge-high {
+  background-color: var(--status-review-bg);
+  color: var(--status-review);
+  border: 1px solid rgba(217, 119, 6, 0.2);
+}
+
+.priority-badge-medium {
+  background-color: var(--status-ai-bg);
+  color: var(--status-ai);
+  border: 1px solid rgba(2, 132, 199, 0.2);
+}
+
+.priority-badge-low {
+  background-color: var(--status-pending-bg);
+  color: var(--status-pending);
+  border: 1px solid var(--border-default);
+}

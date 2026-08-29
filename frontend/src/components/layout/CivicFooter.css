@@ -1,0 +1,41 @@
+.civic-footer {
+  background-color: var(--civic-navy);
+  color: #94a3b8;
+  border-top: 1px solid var(--civic-navy-muted);
+  padding: 2rem 0;
+  margin-top: auto;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.footer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #e2e8f0;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  margin-bottom: 0.5rem;
+}
+
+.footer-disclaimer {
+  font-size: 0.8125rem;
+  color: #94a3b8;
+  max-width: 700px;
+  line-height: 1.5;
+}
+
+.footer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #64748b;
+  padding-top: 1rem;
+  border-top: 1px solid var(--civic-navy-muted);
+}

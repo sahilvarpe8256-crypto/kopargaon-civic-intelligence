@@ -1,0 +1,429 @@
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(2px);
+  z-index: 110;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.report-detail-drawer {
+  background: var(--bg-surface);
+  width: 100%;
+  max-width: 620px;
+  height: 100vh;
+  box-shadow: var(--shadow-xl);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: drawerSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes drawerSlideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.drawer-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.drawer-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.drawer-id-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.drawer-report-id {
+  font-family: monospace;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--civic-primary);
+}
+
+.drawer-issue-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.btn-close-drawer {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.btn-close-drawer:hover {
+  background-color: var(--border-subtle);
+  color: var(--text-primary);
+}
+
+.drawer-scroll-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Status Banner */
+.drawer-status-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: var(--bg-surface-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.drawer-status-current {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.banner-lbl {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.banner-status-pill {
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  background-color: var(--civic-primary-light);
+  color: var(--civic-primary-dark);
+  text-transform: uppercase;
+}
+
+.drawer-citizens-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background-color: #fef08a;
+  color: #854d0e;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+}
+
+/* Drawer Section */
+.drawer-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.section-title-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--text-primary);
+}
+
+.drawer-section-title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.sparkle-color {
+  color: var(--civic-accent);
+}
+
+.info-kv-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+
+.i-kv {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.i-lbl {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.i-val {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.drawer-description-box {
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.i-desc-text {
+  font-size: 0.8125rem;
+  font-style: italic;
+  color: var(--text-primary);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Citizen Evidence Photo Placeholder */
+.evidence-placeholder-canvas {
+  width: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-default);
+}
+
+.evidence-mock-panel {
+  background: #0f172a;
+  color: #f8fafc;
+  padding: 1.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.evidence-cam-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.evidence-panel-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.evidence-panel-text strong {
+  font-size: 0.9375rem;
+  color: #ffffff;
+}
+
+.evidence-panel-text span {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.evidence-real-img {
+  width: 100%;
+  max-height: 240px;
+  object-fit: cover;
+}
+
+/* AI Checklist Box */
+.ai-checklist-box {
+  background-color: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.ai-confidence-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8125rem;
+  color: #0369a1;
+  font-weight: 600;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid #e0f2fe;
+}
+
+.conf-score {
+  font-size: 0.9375rem;
+  font-weight: 800;
+}
+
+.ai-points-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.ai-points-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8125rem;
+  color: #0369a1;
+}
+
+.ai-point-check {
+  color: var(--civic-primary);
+  flex-shrink: 0;
+}
+
+.mock-ai-tag {
+  font-size: 0.6875rem;
+  color: #0284c7;
+  font-style: italic;
+}
+
+/* Duplicate Reports Section */
+.duplicate-reports-section {
+  background-color: var(--bg-surface-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+}
+
+.dup-drawer-desc {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.supporting-chips-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.25rem;
+}
+
+.drawer-id-pill {
+  font-family: monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background-color: white;
+  border: 1px solid var(--border-default);
+  padding: 0.25rem 0.55rem;
+  border-radius: var(--radius-sm);
+}
+
+.drawer-id-pill.is-primary {
+  background-color: var(--civic-primary);
+  color: white;
+  border-color: var(--civic-primary);
+}
+
+/* Officer Actions Footer */
+.drawer-actions-footer {
+  padding: 1.25rem 1.5rem;
+  background-color: var(--bg-surface-subtle);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.actions-header-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.officer-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+  gap: 0.5rem;
+}
+
+.btn-action-flow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn-approve {
+  background-color: #0f766e;
+  color: white;
+}
+.btn-approve:hover { background-color: #115e59; }
+
+.btn-assign {
+  background-color: #0369a1;
+  color: white;
+}
+.btn-assign:hover { background-color: #075985; }
+
+.btn-progress {
+  background-color: #d97706;
+  color: white;
+}
+.btn-progress:hover { background-color: #b45309; }
+
+.btn-resolve {
+  background-color: #16a34a;
+  color: white;
+}
+.btn-resolve:hover { background-color: #15803d; }
+
+.btn-reject {
+  background-color: #64748b;
+  color: white;
+}
+.btn-reject:hover { background-color: #475569; }
+
+@media (max-width: 600px) {
+  .info-kv-grid {
+    grid-template-columns: 1fr;
+  }
+  .officer-actions-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

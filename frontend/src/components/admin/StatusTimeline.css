@@ -1,0 +1,127 @@
+.status-timeline-wrapper {
+  background-color: var(--bg-surface-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.timeline-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.timeline-section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.current-state-badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--civic-primary);
+  background-color: var(--civic-primary-light);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+}
+
+.timeline-stages-bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: relative;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+}
+
+.timeline-stage-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  flex: 1;
+  min-width: 90px;
+  z-index: 2;
+}
+
+.stage-marker {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 2px solid var(--border-default);
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+}
+
+.marker-check {
+  color: white;
+}
+
+.marker-dot-active {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full);
+  background-color: white;
+  box-shadow: 0 0 0 2px white;
+}
+
+.marker-circle-empty {
+  color: #cbd5e1;
+}
+
+.timeline-stage-step.completed .stage-marker {
+  background-color: #16a34a;
+  border-color: #16a34a;
+  color: white;
+}
+
+.timeline-stage-step.active .stage-marker {
+  background-color: var(--civic-primary);
+  border-color: var(--civic-primary);
+  color: white;
+  box-shadow: 0 0 0 4px var(--civic-primary-light);
+}
+
+.stage-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.25;
+}
+
+.timeline-stage-step.completed .stage-label {
+  color: #166534;
+}
+
+.timeline-stage-step.active .stage-label {
+  color: var(--civic-primary-dark);
+  font-weight: 800;
+}
+
+.stage-connector {
+  position: absolute;
+  top: 17px;
+  left: 50%;
+  width: 100%;
+  height: 3px;
+  background-color: #e2e8f0;
+  z-index: -1;
+}
+
+.stage-connector.conn-completed {
+  background-color: #16a34a;
+}

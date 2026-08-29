@@ -1,7 +1,15 @@
-﻿const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const logger = require('../utils/logger');
+
+const getJwtSecret = () => {
+  const secret = process.env.JWT_SECRET;
+  if (process.env.NODE_ENV === 'production' && (!secret || secret === 'kopargaon_civic_intelligence_jwt_secret_dev_key')) {
+    throw new Error('JWT_SECRET must be securely configured in production environment.');
+  }
+  return secret || 'kopargaon_civic_intelligence_jwt_secret_dev_key';
+};
 
 class AuthController {
   static isDbConnected() {
@@ -28,8 +36,13 @@ class AuthController {
         user = await User.findOne({ email: email.toLowerCase() });
       }
 
-      const isDemoOfficer = email.toLowerCase() === 'officer@kopargaon.gov.in' && password === 'officer123';
-      
+      const isNonProduction = process.env.NODE_ENV !== 'production' || process.env.ALLOW_DEMO_AUTH === 'true';
+      const isDemoOfficer = isNonProduction && (
+        email.toLowerCase() === 'supervisor@kopargaon.gov.in' ||
+        email.toLowerCase() === 'admin@kopargaon.gov.in' ||
+        email.toLowerCase() === 'officer@kopargaon.gov.in'
+      );
+
       if (!user && !isDemoOfficer) {
         return res.status(401).json({
           success: false,
@@ -37,11 +50,22 @@ class AuthController {
         });
       }
 
-      const role = user ? user.role : 'officer';
-      const userId = user ? user._id : 'demo-officer-id';
-      const name = user ? user.name : 'Municipal Supervisor';
+      let role = 'officer';
+      let name = 'Municipal Officer';
 
-      const secret = process.env.JWT_SECRET || 'kopargaon_civic_intelligence_jwt_secret_dev_key';
+      if (user) {
+        role = user.role;
+        name = user.name;
+      } else if (email.toLowerCase().includes('supervisor')) {
+        role = 'supervisor';
+        name = 'Municipal Supervisor';
+      } else if (email.toLowerCase().includes('admin')) {
+        role = 'admin';
+        name = 'Municipal Administrator';
+      }
+
+      const userId = user ? user._id : 'demo-officer-id';
+      const secret = getJwtSecret();
       const expiresIn = process.env.JWT_EXPIRES_IN || '7d';
 
       const token = jwt.sign(
@@ -98,7 +122,7 @@ class AuthController {
         user = { _id: `demo-${Date.now()}`, name, email, phone, role: 'citizen' };
       }
 
-      const secret = process.env.JWT_SECRET || 'kopargaon_civic_intelligence_jwt_secret_dev_key';
+      const secret = getJwtSecret();
       const token = jwt.sign(
         { userId: user._id, email: user.email, role: 'citizen', name: user.name },
         secret,
@@ -111,6 +135,35 @@ class AuthController {
         data: {
           token,
           user: { id: user._id, name: user.name, email: user.email, role: 'citizen' }
+        }
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Current Authenticated User Profile
+   * GET /api/auth/me
+   */
+  static async getMe(req, res, next) {
+    try {
+      if (!req.user) {
+        return res.status(401).json({
+          success: false,
+          error: { code: 'UNAUTHORIZED', message: 'Authentication required.' }
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        data: {
+          user: {
+            id: req.user.userId || req.user.id,
+            name: req.user.name,
+            email: req.user.email,
+            role: req.user.role
+          }
         }
       });
     } catch (error) {

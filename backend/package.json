@@ -1,0 +1,32 @@
+{
+  "name": "kopargaon-civic-intelligence-ai",
+  "version": "1.0.0",
+  "description": "AI analysis and visual observation service for Kopargaon Waste Intelligence Platform",
+  "main": "services/aiService.js",
+  "scripts": {
+    "test": "jest --runInBand --detectOpenHandles"
+  },
+  "keywords": [
+    "kopargaon",
+    "civic-intelligence",
+    "gemini",
+    "ai-analysis",
+    "vision"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ],
+    "verbose": true
+  }
+}

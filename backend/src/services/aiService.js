@@ -2,6 +2,7 @@ require('dotenv').config();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const { validateAndNormalizeObservations, DEFAULT_CONFIDENCE_THRESHOLD } = require('./aiValidator');
 const { getMockAnalysis } = require('./mockAi');
+const logger = require('../utils/logger');
 
 const SUPPORTED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'];
 
@@ -92,47 +93,46 @@ function formatImageForGemini(imageInput) {
  * Primary AI Analysis Service Interface.
  * Analyzes waste image using Google Gemini Vision with deterministic mock fallback.
  *
- * @param {Buffer|string|Object} image - Image buffer, base64 string, or { data, mimeType }
- * @param {Object} [options={}] - Execution options
- * @param {'auto'|'gemini'|'mock'} [options.mode] - Force mock or gemini mode (defaults to process.env.AI_MODE || 'auto')
- * @param {string} [options.apiKey] - Optional override for GEMINI_API_KEY
- * @param {string} [options.modelName] - Gemini model name (default: 'gemini-2.0-flash' or 'gemini-1.5-flash')
- * @param {number|string} [options.confidenceThreshold] - Confidence threshold for manual verification
- * @returns {Promise<{
- *   wasteType: string,
- *   severity: number,
- *   healthRisk: number,
- *   environmentalRisk: number,
- *   obstruction: number,
- *   confidence: number,
- *   detectedElements: string[],
- *   requiresManualVerification: boolean,
- *   notes: string
- * }>}
+ * Supports both function signatures:
+ * 1. analyzeWasteImage(image, options)
+ * 2. analyzeWasteImage({ image, mimetype, description, mode, ... })
+ *
+ * @param {Buffer|string|Object} imageInput
+ * @param {Object} [options={}]
+ * @returns {Promise<Object>} Normalized observational evidence
  */
-async function analyzeWasteImage(image, options = {}) {
-  const mode = options.mode || process.env.AI_MODE || 'auto';
-  const apiKey = options.apiKey || process.env.GEMINI_API_KEY;
-  const modelName = options.modelName || process.env.GEMINI_MODEL || 'gemini-2.0-flash';
-  const threshold = options.confidenceThreshold !== undefined
-    ? options.confidenceThreshold
+async function analyzeWasteImage(imageInput, options = {}) {
+  // Support single-object param: { image, mimetype, description, mode, ... }
+  let image = imageInput;
+  let opts = { ...options };
+
+  if (typeof imageInput === 'object' && imageInput !== null && !Buffer.isBuffer(imageInput) && !imageInput.data && imageInput.image !== undefined) {
+    image = imageInput.image;
+    opts = { ...imageInput, ...options };
+  }
+
+  const mode = opts.mode || process.env.AI_MODE || 'auto';
+  const apiKey = opts.apiKey || process.env.GEMINI_API_KEY;
+  const modelName = opts.modelName || process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+  const threshold = opts.confidenceThreshold !== undefined
+    ? opts.confidenceThreshold
     : (process.env.CONFIDENCE_THRESHOLD || DEFAULT_CONFIDENCE_THRESHOLD);
 
   // 1. Explicit mock mode: Return deterministic mock analysis immediately
   if (mode === 'mock') {
-    const mockRaw = getMockAnalysis(image);
+    const mockRaw = getMockAnalysis(image || (opts.description ? opts.description : 'default'));
     const normalized = validateAndNormalizeObservations(mockRaw, threshold);
     return normalized.data;
   }
 
-  // 2. Explicit strict gemini mode without API key: Throw visible error rather than silently masking failure
+  // 2. Explicit strict gemini mode without API key: Throw visible error
   if (mode === 'gemini' && !apiKey) {
     throw new Error('Gemini API key is required when AI_MODE is explicitly set to "gemini"');
   }
 
   // 3. Auto mode without API key: Fall back safely to mock
   if (!apiKey) {
-    const mockRaw = getMockAnalysis(image);
+    const mockRaw = getMockAnalysis(image || (opts.description ? opts.description : 'default'));
     const normalized = validateAndNormalizeObservations(mockRaw, threshold);
     return normalized.data;
   }
@@ -177,21 +177,25 @@ async function analyzeWasteImage(image, options = {}) {
     const normalized = validateAndNormalizeObservations(fallback, threshold);
     return normalized.data;
   } catch (error) {
-    // In strict gemini mode, propagate the error for production observability
     if (mode === 'gemini') {
       throw error;
     }
 
-    // In auto mode, gracefully fall back to mock observations
-    const fallback = getMockAnalysis(image);
+    const fallback = getMockAnalysis(image || (opts.description ? opts.description : 'default'));
     const normalized = validateAndNormalizeObservations(fallback, threshold);
     return normalized.data;
   }
 }
 
-module.exports = {
-  analyzeWasteImage,
-  formatImageForGemini,
-  SUPPORTED_MIME_TYPES,
-  SYSTEM_PROMPT
-};
+class AIService {
+  static analyzeWasteImage(params, options) {
+    return analyzeWasteImage(params, options);
+  }
+}
+
+module.exports = AIService;
+module.exports.analyzeWasteImage = analyzeWasteImage;
+module.exports.formatImageForGemini = formatImageForGemini;
+module.exports.SUPPORTED_MIME_TYPES = SUPPORTED_MIME_TYPES;
+module.exports.SYSTEM_PROMPT = SYSTEM_PROMPT;
+module.exports.AIService = AIService;

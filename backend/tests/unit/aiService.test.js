@@ -1,5 +1,5 @@
-const { analyzeWasteImage, formatImageForGemini } = require('../../services/aiService');
-const { DEFAULT_MOCK_OBSERVATIONS } = require('../../services/mockAi');
+const { analyzeWasteImage, formatImageForGemini } = require('../../src/services/aiService');
+const { DEFAULT_MOCK_OBSERVATIONS } = require('../../src/services/mockAi');
 
 describe('AI Service Unit & Mock Integration Tests', () => {
   beforeEach(() => {
@@ -7,8 +7,8 @@ describe('AI Service Unit & Mock Integration Tests', () => {
     process.env.AI_MODE = 'mock';
   });
 
-  it('1. Mock AI returns valid structured output without GEMINI_API_KEY', async () => {
-    const result = await analyzeWasteImage('sample_image.jpg');
+  it('1. Mock AI returns valid structured output in explicit mock mode', async () => {
+    const result = await analyzeWasteImage('sample_image.jpg', { mode: 'mock' });
 
     expect(result).toBeDefined();
     expect(result).toHaveProperty('wasteType');
@@ -46,11 +46,11 @@ describe('AI Service Unit & Mock Integration Tests', () => {
     expect(result.confidence).toBeLessThanOrEqual(100);
   });
 
-  it('3. Missing GEMINI_API_KEY does not crash the service and falls back to mock mode', async () => {
+  it('3. Auto mode without GEMINI_API_KEY does not crash and falls back safely to mock observations', async () => {
     delete process.env.GEMINI_API_KEY;
     delete process.env.AI_MODE;
 
-    await expect(analyzeWasteImage('test.jpg')).resolves.toEqual(
+    await expect(analyzeWasteImage('test.jpg', { mode: 'auto' })).resolves.toEqual(
       expect.objectContaining({
         wasteType: expect.any(String),
         severity: expect.any(Number),
@@ -59,14 +59,29 @@ describe('AI Service Unit & Mock Integration Tests', () => {
     );
   });
 
-  it('4. Low confidence produces requiresManualVerification = true', async () => {
+  it('4. Strict gemini mode without API key throws an explicit error', async () => {
+    delete process.env.GEMINI_API_KEY;
+
+    await expect(analyzeWasteImage('test.jpg', { mode: 'gemini' })).rejects.toThrow(
+      'Gemini API key is required when AI_MODE is explicitly set to "gemini"'
+    );
+  });
+
+  it('5. Low confidence produces requiresManualVerification = true', async () => {
     const result = await analyzeWasteImage('unclear_blurry_image.jpg');
 
     expect(result.confidence).toBeLessThan(50);
     expect(result.requiresManualVerification).toBe(true);
   });
 
-  it('5. The service does NOT calculate priorityScore or make resource decisions', async () => {
+  it('6. Supports confidence threshold configured as string or number', async () => {
+    const result = await analyzeWasteImage('sample.jpg', { confidenceThreshold: '99' });
+
+    // Since mock confidence is 95, threshold 99 forces requiresManualVerification
+    expect(result.requiresManualVerification).toBe(true);
+  });
+
+  it('7. The service does NOT calculate priorityScore or make resource decisions', async () => {
     const result = await analyzeWasteImage('sample_waste.jpg');
 
     // Strict boundary enforcement
@@ -78,14 +93,14 @@ describe('AI Service Unit & Mock Integration Tests', () => {
     expect(result.assignedVehicle).toBeUndefined();
   });
 
-  it('6. The same mock input produces deterministic output', async () => {
+  it('8. The same mock input produces deterministic output', async () => {
     const run1 = await analyzeWasteImage('test_waste.jpg');
     const run2 = await analyzeWasteImage('test_waste.jpg');
 
     expect(run1).toEqual(run2);
   });
 
-  it('7. Handles multiple image input formats gracefully (Buffer, data URI, Object)', () => {
+  it('9. Handles multiple valid image formats correctly (Buffer, data URI, Object)', () => {
     // Buffer
     const bufferImage = Buffer.from('fake image content');
     const formattedBuffer = formatImageForGemini(bufferImage);
@@ -102,5 +117,13 @@ describe('AI Service Unit & Mock Integration Tests', () => {
     const formattedObj = formatImageForGemini(objImage);
     expect(formattedObj.inlineData.mimeType).toBe('image/webp');
     expect(formattedObj.inlineData.data).toBe('aGVsbG8=');
+  });
+
+  it('10. Rejects invalid MIME types or corrupted base64 strings in image formatter', () => {
+    expect(formatImageForGemini(null)).toBeNull();
+    expect(formatImageForGemini('')).toBeNull();
+    expect(formatImageForGemini({ data: 'abc', mimeType: 'text/plain' })).toBeNull();
+    expect(formatImageForGemini('data:application/pdf;base64,JVBERi0xLjQK')).toBeNull();
+    expect(formatImageForGemini('corrupted non base64 string @@##$$%%')).toBeNull();
   });
 });

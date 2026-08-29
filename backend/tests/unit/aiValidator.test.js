@@ -1,4 +1,4 @@
-const { validateAndNormalizeObservations } = require('../../services/aiValidator');
+const { validateAndNormalizeObservations, DEFAULT_CONFIDENCE_THRESHOLD } = require('../../src/services/aiValidator');
 
 describe('AI Validator Unit Tests', () => {
   it('1. Successfully validates and normalizes a standard observation payload', () => {
@@ -65,13 +65,26 @@ describe('AI Validator Unit Tests', () => {
     expect(result.data.requiresManualVerification).toBe(true);
   });
 
-  it('4. Rejects non-object raw payload safely', () => {
+  it('4. Handles string-based threshold conversion gracefully', () => {
+    const raw = {
+      wasteType: 'unknown',
+      severity: 50,
+      confidence: 65,
+      requiresManualVerification: false
+    };
+
+    const result = validateAndNormalizeObservations(raw, '70'); // threshold 70 > 65
+    expect(result.isValid).toBe(true);
+    expect(result.data.requiresManualVerification).toBe(true);
+  });
+
+  it('5. Rejects non-object raw payload safely', () => {
     expect(validateAndNormalizeObservations(null).isValid).toBe(false);
     expect(validateAndNormalizeObservations('string').isValid).toBe(false);
     expect(validateAndNormalizeObservations(undefined).isValid).toBe(false);
   });
 
-  it('5. Provides safe defaults for missing or empty fields', () => {
+  it('6. Provides safe defaults for missing or empty fields', () => {
     const raw = {};
     const result = validateAndNormalizeObservations(raw);
 

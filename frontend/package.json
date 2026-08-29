@@ -1,5 +1,5 @@
 {
-  "name": "kopargaon-civic-intelligence-frontend",
+  "name": "kopargaon-civic-frontend",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -9,13 +9,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "lucide-react": "^1.16.0",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^0.460.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^7.2.0"
+    "react-leaflet": "^4.2.1",
+    "react-router-dom": "^6.28.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
-    "vite": "^6.2.0"
+    "vite": "^6.0.1"
   }
 }

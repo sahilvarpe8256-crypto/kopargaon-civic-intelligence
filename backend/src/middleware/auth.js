@@ -1,5 +1,13 @@
-﻿const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const { User } = require('../models');
+
+const getJwtSecret = () => {
+  const secret = process.env.JWT_SECRET;
+  if (process.env.NODE_ENV === 'production' && (!secret || secret === 'kopargaon_civic_intelligence_jwt_secret_dev_key')) {
+    throw new Error('JWT_SECRET must be securely set in production environment.');
+  }
+  return secret || 'kopargaon_civic_intelligence_jwt_secret_dev_key';
+};
 
 const verifyToken = async (req, res, next) => {
   try {
@@ -12,7 +20,7 @@ const verifyToken = async (req, res, next) => {
     }
 
     const token = authHeader.split(' ')[1];
-    const secret = process.env.JWT_SECRET || 'kopargaon_civic_intelligence_jwt_secret_dev_key';
+    const secret = getJwtSecret();
 
     const decoded = jwt.verify(token, secret);
     req.user = decoded;
@@ -20,7 +28,7 @@ const verifyToken = async (req, res, next) => {
   } catch (err) {
     return res.status(401).json({
       success: false,
-      error: { code: 'UNAUTHORIZED', message: 'Invalid or expired token.' }
+      error: { code: 'UNAUTHORIZED', message: err.message || 'Invalid or expired token.' }
     });
   }
 };
@@ -39,5 +47,6 @@ const requireRole = (role) => {
 
 module.exports = {
   verifyToken,
-  requireRole
+  requireRole,
+  getJwtSecret
 };

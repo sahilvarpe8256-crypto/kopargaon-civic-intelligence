@@ -1,0 +1,159 @@
+.waste-report-flow-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.flow-card-body {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 2.25rem 2rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.step-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.step-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.step-subtitle {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+}
+
+.details-step-panel {
+  gap: 1.75rem;
+}
+
+.description-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.desc-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.char-counter {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.char-counter.limit-near {
+  color: var(--status-rejected);
+}
+
+.civic-textarea {
+  width: 100%;
+  border: 1.5px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 0.875rem 1rem;
+  font-family: var(--font-family-body);
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  background-color: var(--bg-surface);
+  resize: vertical;
+  line-height: 1.5;
+  transition: all var(--transition-fast);
+}
+
+.civic-textarea:focus {
+  outline: none;
+  border-color: var(--civic-primary);
+  box-shadow: 0 0 0 3px var(--civic-primary-light);
+}
+
+.indicators-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.indicators-hint {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.indicator-checkboxes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+.indicator-checkbox-card {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  background-color: var(--bg-surface-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.625rem 0.875rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.indicator-checkbox-card:hover {
+  background-color: var(--bg-surface);
+  border-color: var(--border-default);
+}
+
+.indicator-checkbox-card.checked {
+  background-color: var(--civic-primary-light);
+  border-color: var(--civic-primary);
+}
+
+.indicator-checkbox-card input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--civic-primary);
+}
+
+.indicator-label-text {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.ai-step-panel {
+  gap: 1.5rem;
+}
+
+.flow-footer-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-subtle);
+  gap: 1rem;
+}
+
+.btn-submit-report {
+  padding: 0.875rem 1.75rem;
+  font-size: 1rem;
+}
+
+@media (max-width: 640px) {
+  .flow-card-body {
+    padding: 1.5rem 1.25rem;
+  }
+  .flow-footer-actions {
+    flex-direction: column-reverse;
+  }
+  .flow-footer-actions button,
+  .flow-footer-actions a {
+    width: 100%;
+  }
+}

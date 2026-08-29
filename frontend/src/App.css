@@ -1,0 +1,86 @@
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2.5rem 0 4rem;
+}
+
+/* Admin layout overrides */
+.app-layout.admin-layout-mode {
+  background-color: var(--bg-app);
+}
+
+.main-content.admin-main-content {
+  padding: 0;
+}
+
+/* Temporary Shell Styling */
+.shell-container {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem;
+  box-shadow: var(--shadow-sm);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.shell-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.shell-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background-color: var(--civic-primary-light);
+  color: var(--civic-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shell-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.6rem;
+  background: var(--bg-surface-subtle);
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  margin-top: 0.5rem;
+}
+
+.shell-description {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.shell-info-box {
+  background-color: var(--bg-surface-subtle);
+  border-left: 4px solid var(--civic-primary);
+  padding: 1rem 1.25rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.shell-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}

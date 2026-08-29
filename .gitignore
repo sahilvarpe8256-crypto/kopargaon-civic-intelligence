@@ -1,0 +1,81 @@
+﻿# ──────────────────────────────────────────────
+# Kopargaon Waste Intelligence — .gitignore
+# ──────────────────────────────────────────────
+
+# ─── Environment & Secrets ───────────────────
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+
+# ─── Dependencies ────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+
+# ─── Build Output ────────────────────────────
+dist/
+build/
+out/
+.next/
+.cache/
+.vite/
+
+# ─── Uploaded Files (never commit user uploads) ─
+uploads/
+tmp/
+temp/
+
+# ─── Logs ────────────────────────────────────
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+logs/
+
+# ─── Runtime / Testing ───────────────────────
+*.pid
+*.seed
+*.pid.lock
+coverage/
+*.lcov
+.nyc_output/
+lib-cov/
+
+# ─── OS Generated ────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ─── IDE & Editors ───────────────────────────
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# ─── TypeScript ──────────────────────────────
+*.tsbuildinfo
+
+# ─── Misc ────────────────────────────────────
+.eslintcache
+.stylelintcache
+.vercel
+.netlify

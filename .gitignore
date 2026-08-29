@@ -1,4 +1,4 @@
-﻿# Environment & Secrets
+# Environment & Secrets
 .env
 .env.*
 !.env.example
@@ -20,8 +20,8 @@ out/
 .vite/
 
 # Uploaded Files & Storage
-uploads/*
-!uploads/.gitkeep
+**/uploads/*
+!**/uploads/.gitkeep
 tmp/
 temp/
 

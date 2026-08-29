@@ -1,14 +1,22 @@
-const express = require('express');
+﻿const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const path = require('path');
 const { SERVICE_NAME, DEFAULT_ALLOWED_ORIGINS } = require('./config/constants');
 const { notFoundHandler, errorHandler } = require('./middleware/errorHandler');
+
+// Route imports
+const reportRoutes = require('./routes/reportRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 
 // Security middleware
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 
 // CORS configuration
 const allowedOrigins = process.env.ALLOWED_ORIGINS
@@ -29,6 +37,9 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// Static uploads serving
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
 // HTTP Request logging (suppress in test environment)
 if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('dev'));
@@ -43,6 +54,11 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString()
   });
 });
+
+// API Domain Routes
+app.use('/api/reports', reportRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/auth', authRoutes);
 
 // JSON 404 Handler
 app.use(notFoundHandler);

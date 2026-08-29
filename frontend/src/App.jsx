@@ -11,7 +11,10 @@ import AdminDashboardPage from './pages/Admin/AdminDashboardPage';
 import AdminReportsPage from './pages/Admin/AdminReportsPage';
 import AdminReportDetailPage from './pages/Admin/AdminReportDetailPage';
 import AdminMapPage from './pages/Admin/AdminMapPage';
+import LoginPage from './pages/Auth/LoginPage';
+import RegisterPage from './pages/Auth/RegisterPage';
 import ComingSoonPage from './pages/ComingSoon/ComingSoonPage';
+import NotFoundPage from './pages/NotFound/NotFoundPage';
 import './App.css';
 
 export default function App() {
@@ -26,6 +29,8 @@ export default function App() {
             <Route path="/track" element={<TrackReportPage />} />
             <Route path="/track/:reportId" element={<TrackReportPage />} />
             <Route path="/my-reports" element={<MyReportsPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
             <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="/admin/login" element={<AdminLoginPage />} />
             <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
@@ -33,7 +38,7 @@ export default function App() {
             <Route path="/admin/reports/:reportId" element={<AdminReportDetailPage />} />
             <Route path="/admin/map" element={<AdminMapPage />} />
             <Route path="/report/:category" element={<ComingSoonPage />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
         <CivicFooter />

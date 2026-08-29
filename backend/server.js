@@ -1,47 +1,84 @@
-require('dotenv').config();
-const app = require('./src/app');
-const logger = require('./src/utils/logger');
-const { connectDB } = require('./src/config/db');
-const { SERVICE_NAME, DEFAULT_PORT } = require('./src/config/constants');
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const PORT = process.env.PORT || DEFAULT_PORT;
+import { connectDB } from './config/db.js';
+import authRoutes from './routes/authRoutes.js';
+import reportRoutes from './routes/reportRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
+import officerRoutes from './routes/officerRoutes.js';
 
-/**
- * Starts the application by connecting to the database first,
- * then listening on the configured HTTP port.
- */
-const startServer = async () => {
-  try {
-    // Establish database connection
-    await connectDB();
+dotenv.config();
 
-    // Start Express HTTP server
-    const server = app.listen(PORT, () => {
-      logger.info(`${SERVICE_NAME} running on port ${PORT} [${process.env.NODE_ENV || 'development'}]`);
-    });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-    return server;
-  } catch (error) {
-    logger.error(`Failed to start server: ${error.message}`);
-    process.exit(1);
-  }
-};
+const app = express();
+const PORT = process.env.PORT || 5000;
 
-// Start server if executed directly
-if (process.env.NODE_ENV !== 'test') {
-  startServer();
-}
+// Connect Database & Seed Data
+connectDB();
 
-// Global process error handlers
-process.on('unhandledRejection', (err) => {
-  logger.error('Unhandled Promise Rejection:', err);
+// CORS configuration (allow Vite frontend)
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:5173,http://127.0.0.1:5173')
+  .split(',')
+  .map(o => o.trim());
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Dev-friendly fallback
+    }
+  },
+  credentials: true
+}));
+
+// Body Parsers
+app.use(express.json({ limit: '25mb' }));
+app.use(express.urlencoded({ extended: true, limit: '25mb' }));
+
+// Static uploads serving
+app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Root & Health check
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'online',
+    service: 'Kopargaon Civic Intelligence REST API',
+    council: 'Kopargaon Municipal Council',
+    version: '1.0.0',
+    timestamp: new Date()
+  });
 });
 
-process.on('uncaughtException', (err) => {
-  logger.error('Uncaught Exception:', err);
-  process.exit(1);
+// API Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/reports', reportRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/officer', officerRoutes);
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+  console.error('Server error handler caught:', err.message);
+  res.status(err.status || 500).json({
+    success: false,
+    error: {
+      code: err.code || 'INTERNAL_SERVER_ERROR',
+      message: err.message || 'An unexpected error occurred on the server.'
+    }
+  });
 });
 
-module.exports = {
-  startServer
-};
+app.listen(PORT, () => {
+  console.log(`====================================================`);
+  console.log(`ðŸ›¡ï¸   KOPARGAON CIVIC INTELLIGENCE REST API`);
+  console.log(`ðŸ“¡  Server running on http://localhost:${PORT}`);
+  console.log(`ðŸ—‚ï¸   API Base URL: http://localhost:${PORT}/api`);
+  console.log(`====================================================`);
+});
+
+export default app;

@@ -10,6 +10,7 @@ import AdminLoginPage from './pages/Admin/AdminLoginPage';
 import AdminDashboardPage from './pages/Admin/AdminDashboardPage';
 import AdminReportsPage from './pages/Admin/AdminReportsPage';
 import AdminReportDetailPage from './pages/Admin/AdminReportDetailPage';
+import AdminMapPage from './pages/Admin/AdminMapPage';
 import ComingSoonPage from './pages/ComingSoon/ComingSoonPage';
 import './App.css';
 
@@ -30,6 +31,7 @@ export default function App() {
             <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
             <Route path="/admin/reports" element={<AdminReportsPage />} />
             <Route path="/admin/reports/:reportId" element={<AdminReportDetailPage />} />
+            <Route path="/admin/map" element={<AdminMapPage />} />
             <Route path="/report/:category" element={<ComingSoonPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

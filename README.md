@@ -1,188 +1,165 @@
-﻿# Kopargaon Waste Intelligence Platform
+﻿# Kopargaon Civic Intelligence Platform
 
-> AI-assisted civic waste management and resource prioritization platform exclusively for Kopargaon Municipal Council.
-
----
-
-## Problem Statement
-
-Kopargaon Municipal Council faces multiple competing waste-management issues simultaneously â€” illegal dumping sites, overflowing dustbins, hazardous waste near schools â€” but has limited staff, vehicles, budget, and time. Existing complaint systems merely record issues; they do not verify evidence, prioritize competing reports, or allocate resources intelligently.
+> **AI-assisted resource-constrained civic decision and response platform for Kopargaon Municipal Council.**
 
 ---
 
-## Solution Overview
+## 1. Problem Statement
 
-The Kopargaon Waste Intelligence Platform combines AI-powered visual evidence analysis with a deterministic, explainable priority engine to help municipal officers make faster, fairer, and more resource-efficient decisions.
+Municipal councils like Kopargaon Municipal Council receive numerous competing civic complaints daily—ranging from overflowing community garbage bins and illegal road dumping to toxic waste near schools and market blockages. However, the council operates under **strictly limited municipal resources**:
+- Fixed number of sanitation and waste crews
+- Limited collection and transport vehicles (small tippers, compactors, tractors)
+- Constrained daily operational hours and labor shifts
+- Capped emergency and maintenance budgets
 
-**AI does NOT make final decisions.** It provides structured evidence. A deterministic engine produces a scored, ranked recommendation. A municipal officer retains full authority to approve or override.
+Traditional civic apps merely act as passive complaint logs. They register tickets first-come, first-served without verifying visual evidence, assessing public health and environmental risks, or calculating whether sufficient municipal resources exist to resolve the issue. This results in severe backlogs, delayed response to hazardous incidents, and inefficient dispatch.
 
 ---
 
-## Core Workflow
+## 2. Solution: Resource-Constrained Prioritization
+
+The **Kopargaon Civic Intelligence Platform** transforms civic reporting into an **intelligent, explainable decision-support system**:
+
+1. **Evidence Verification:** Citizens submit geo-tagged photographic evidence.
+2. **AI Visual Assessment:** Google Gemini Vision (`@google/genai`) inspects the photo and produces structured observations (waste type, severity, health risk, environmental risk, public obstruction, confidence).
+3. **Location & Population Exposure:** Geospatial mapping identifies the Kopargaon zone and estimates population exposure.
+4. **Deterministic Priority Scoring:** A transparent, explainable scoring engine calculates an objective 0–100 priority score based on weighted civic factors.
+5. **Resource Feasibility & Queue Optimization:** The platform evaluates available municipal crews, vehicles, and budget to recommend an actionable, optimized dispatch schedule with transparent reasons for prioritized vs. deferred reports.
+6. **Municipal Officer Authority:** Municipal officers review evidence and the explainable recommendation, approve or override the plan, and dispatch crews.
+7. **Citizen Feedback Loop:** Citizens track real-time status and receive clear outcome updates.
+
+> **CRITICAL RULE:** Gemini AI does **NOT** decide the final priority score or resource allocation. AI acts purely as an evidence observer. The backend deterministic engine computes the final score and resource recommendation. The municipal officer retains final authority.
+
+---
+
+## 3. Civic Categories & Scope
+
+| Category | Status | Details |
+|---|---|---|
+| **Waste Management** | 🟢 **Fully Functional (MVP)** | Solid waste, garbage overflow, illegal dumping, hazardous debris |
+| Water & Leakage | 🟡 *Coming Soon* | Pipeline bursts, low pressure, contamination |
+| Street Lighting | 🟡 *Coming Soon* | Broken poles, dark stretches, electrical hazards |
+| Roads & Infrastructure | 🟡 *Coming Soon* | Potholes, open manholes, damaged pavements |
+| Public Spaces | 🟡 *Coming Soon* | Encroachments, park maintenance |
+| Disaster / Hazards | 🟡 *Coming Soon* | Fallen trees, waterlogging, building collapse |
+| Stray Animals | 🟡 *Coming Soon* | Stray cattle, rabies risk, animal rescue |
+
+---
+
+## 4. End-to-End Workflow
 
 ```
-Citizen                  Municipal Officer          System
-  |                             |                     |
-  |-- Select Category --------->|                     |
-  |-- Upload Photo ------------>|                     |
-  |-- Add Description (opt) --->|                     |
-  |-- Pin Location (Map) ------>|                     |
-  |-- Submit Report ----------->|                     |
-  |                             |<-- AI Evidence      |
-  |                             |<-- Priority Score   |
-  |                             |<-- Resource Check   |
-  |                             |-- Approve/Override->|
-  |<-- Status Notification -----|                     |
-```
-
-**Step-by-step:**
-1. Citizen selects "Waste Management" category
-2. Citizen uploads a photo of the issue
-3. Citizen adds an optional text description
-4. Citizen pins the location on the Kopargaon map
-5. Report submitted â†’ AI vision analysis triggers
-6. AI returns structured evidence (type, severity, confidence, risk)
-7. Priority engine scores the report against all pending reports
-8. Engine checks available resources (vehicles, workers, budget, time)
-9. Engine produces a ranked recommendation with reasons for each decision
-10. Municipal officer reviews evidence + recommendation side-by-side
-11. Officer approves or overrides the allocation
-12. Citizen receives outcome notification
-
----
-
-## Key Features
-
-- **AI Evidence Assessment** â€” Gemini Vision API analyzes uploaded photos and returns structured JSON: waste type, severity, health risk, obstruction, confidence
-- **Explainable Priority Engine** â€” Deterministic scoring across 6 weighted factors, all shown transparently to the officer
-- **Resource Feasibility Check** â€” Recommendations are filtered against real available vehicles, workers, and budget
-- **Officer Override** â€” Municipal officers can approve, modify, or reject any recommendation with a recorded reason
-- **Citizen Status Tracking** â€” Citizens see real-time report status (Pending â†’ Under Review â†’ Approved/Deferred)
-- **Kopargaon Zone Mapping** â€” Reports are automatically mapped to predefined municipal zones based on GPS coordinates
-- **Competing Report Comparison** â€” Officers can compare multiple pending reports side-by-side before deciding
-
----
-
-## Technology Stack
-
-| Layer | Technology |
-|---|---|
-| Frontend | React 18 + Vite, Vanilla CSS |
-| Backend | Node.js + Express |
-| Database | MongoDB + Mongoose |
-| AI Analysis | Google Gemini Vision API (gemini-2.0-flash) |
-| Maps | Google Maps JavaScript API |
-| Authentication | JWT (JSON Web Tokens) |
-| File Uploads | Multer |
-
----
-
-## Project Architecture
-
-```
-kopargaon-waste-intelligence/
-â”œâ”€â”€ frontend/           # React + Vite (citizen portal + officer dashboard)
-â”‚   â”œâ”€â”€ src/
-â”‚   â”‚   â”œâ”€â”€ pages/      # CitizenPortal, OfficerDashboard, ReportStatus
-â”‚   â”‚   â”œâ”€â”€ components/ # Map, UploadForm, PriorityPanel, EvidenceCard
-â”‚   â”‚   â””â”€â”€ api/        # Axios API client
-â”œâ”€â”€ backend/            # Node.js + Express REST API
-â”‚   â”œâ”€â”€ routes/         # API route definitions
-â”‚   â”œâ”€â”€ controllers/    # Business logic handlers
-â”‚   â”œâ”€â”€ models/         # MongoDB/Mongoose schemas
-â”‚   â”œâ”€â”€ services/       # AI analysis, priority engine, notification
-â”‚   â””â”€â”€ middleware/     # Auth, upload, validation
-â”œâ”€â”€ docs/               # Single source of truth for all agents
-â”‚   â”œâ”€â”€ PROJECT_SPEC.md
-â”‚   â”œâ”€â”€ AI_ANALYSIS_SPEC.md
-â”‚   â”œâ”€â”€ PRIORITY_ENGINE.md
-â”‚   â”œâ”€â”€ DATABASE_SCHEMA.md
-â”‚   â””â”€â”€ API_SPEC.md
-â”œâ”€â”€ .env.example        # Environment variable template (no real keys)
-â”œâ”€â”€ .gitignore
-â””â”€â”€ README.md
+[Citizen] 
+   │ Select Category ("Waste Management")
+   │ Capture/Upload Photograph
+   │ Select & Confirm Location on Kopargaon Map (React Leaflet / OSM)
+   │ Submit Report
+   ▼
+[Backend API]
+   │ Validates payload & stores image via Multer
+   │ Triggers Gemini AI Analysis Service (@google/genai)
+   │ Maps GPS to Kopargaon Zone & retrieves simulated population exposure
+   ▼
+[AI Analysis (@google/genai)]
+   │ Detects waste type, severity (0-100), health risk (0-100),
+   │ environmental risk (0-100), obstruction (0-100), confidence (0.0-1.0)
+   ▼
+[Backend Priority Engine]
+   │ Priority Score = (Severity × 30%) + (Population Exposure × 25%) +
+   │                  (Health Risk × 20%) + (Environmental Risk × 15%) +
+   │                  (Obstruction × 10%)
+   │ Checks available municipal resources (crews, vehicles, hours, budget)
+   │ Generates explainable ranked queue with reasons
+   ▼
+[Municipal Dashboard]
+   │ Officer inspects photo evidence, AI breakdown & explainable score
+   │ Officer reviews resource allocation plan & updates status (Approve/Override)
+   ▼
+[Citizen Notification & Status]
+   │ Citizen views live tracking: Pending → Under Review → Approved / Deferred → Resolved
 ```
 
 ---
 
-## Civic Categories
+## 5. Technology Stack
 
-| Category | Status |
-|---|---|
-| Waste Management | âœ… Fully Functional |
-| Water & Leakage | ðŸ”œ Coming Soon |
-| Street Lighting | ðŸ”œ Coming Soon |
-| Roads & Infrastructure | ðŸ”œ Coming Soon |
-| Public Spaces | ðŸ”œ Coming Soon |
-| Disaster / Hazards | ðŸ”œ Coming Soon |
-| Stray Animals | ðŸ”œ Coming Soon |
+- **Frontend:** React 18, Vite, Tailwind CSS, React Leaflet, OpenStreetMap, Recharts, Lucide React
+- **Backend:** Node.js, Express, Multer, JWT
+- **Database:** MongoDB, Mongoose
+- **AI Vision:** Google Gemini API via `@google/genai` (structured JSON observation schema)
+- **Maps & Geolocation:** React Leaflet, Leaflet, OpenStreetMap
+- **Version Control & Collaboration:** GitHub, Git Feature-Branch Workflow
+- **Development Environment:** Antigravity
 
 ---
 
-## Development Workflow
+## 6. Project Architecture & Documentation
+
+Full architectural specifications and contracts are located in the [`docs/`](docs/) directory:
+
+- 📄 [**`docs/ARCHITECTURE.md`**](docs/ARCHITECTURE.md) — Technical source of truth (System architecture, data flow, MongoDB models, resource model, Git rules, team ownership)
+- 📄 [**`docs/API-CONTRACT.md`**](docs/API-CONTRACT.md) — Exact REST endpoints, JSON payloads, and AI observation schema
+- 📄 [**`docs/PRIORITY_ENGINE.md`**](docs/PRIORITY_ENGINE.md) — Deterministic scoring formula, normalization rules, and resource allocation logic
+- 📄 [**`docs/AI_ANALYSIS_SPEC.md`**](docs/AI_ANALYSIS_SPEC.md) — Gemini Vision input/output contract and error handling
+- 📄 [**`docs/DATABASE_SCHEMA.md`**](docs/DATABASE_SCHEMA.md) — MongoDB schemas and index definitions
+- 📄 [**`docs/PROJECT_SPEC.md`**](docs/PROJECT_SPEC.md) — Functional specifications, Kopargaon zones, and user journeys
+
+---
+
+## 7. Team Structure & Branch Ownership
+
+| Role | Branch | Owner / Focus | Core Responsibilities |
+|---|---|---|---|
+| **Owner / Integration** | `feature/backend-engine` | Backend & Lead | Node.js, Express, MongoDB, REST APIs, Priority Engine, Resource Allocation, Integration Testing |
+| **Citizen App** | `feature/citizen-report` | Frontend Dev 1 | Landing page, category selector, Waste report flow, photo upload UI, React Leaflet map UI, tracking UI |
+| **AI Analysis** | `feature/ai-analysis` | AI Engineer | `@google/genai` integration, vision prompt design, structured observation parsing, error fallbacks |
+| **Municipal Dashboard** | `feature/municipal-dashboard` | Frontend Dev 2 | Officer dashboard, priority queue, explainable score breakdown, resource allocation UI, Recharts charts, status management |
+
+---
+
+## 8. Git Development Workflow
+
+To maintain clean parallel development across 4 team members:
+
+1. **Isolation:** Developers work strictly on their assigned `feature/*` branch.
+2. **Sync Before Work:** Always pull the latest `main` before starting a feature: `git pull origin main`.
+3. **No Direct Pushes to `main`:** All code enters `main` exclusively through Pull Requests.
+4. **Code Reviews:** The Project Owner reviews and merges Pull Requests.
+5. **Contract Adherence:** No developer may alter `docs/API-CONTRACT.md` without full team agreement.
+6. **Zero Secrets:** Never commit `.env`, `.env.*`, or API keys.
+
+---
+
+## 9. Running Locally (Once Implemented)
 
 ### Prerequisites
 - Node.js 20+
-- MongoDB (local or Atlas)
-- Google Gemini API key (Gemini 2.0 Flash recommended)
-- Google Maps JavaScript API key
+- MongoDB (local or MongoDB Atlas)
+- Google Gemini API Key (`GEMINI_API_KEY`)
 
-### Setup
+### Setup Instructions
 ```bash
 # 1. Clone the repository
-git clone https://github.com/<org>/kopargaon-waste-intelligence.git
-cd kopargaon-waste-intelligence
+git clone https://github.com/sahilvarpe8256-crypto/kopargaon-civic-intelligence.git
+cd kopargaon-civic-intelligence
 
-# 2. Copy environment template and fill in values
+# 2. Configure environment variables
 cp .env.example .env
+# Edit .env and supply GEMINI_API_KEY and MONGODB_URI
 
-# 3. Install backend dependencies
-cd backend && npm install
-
-# 4. Install frontend dependencies
-cd ../frontend && npm install
-
-# 5. Start backend (from /backend)
+# 3. Setup Backend
+cd backend
+npm install
 npm run dev
 
-# 6. Start frontend (from /frontend, separate terminal)
+# 4. Setup Frontend (in a separate terminal)
+cd ../frontend
+npm install
 npm run dev
 ```
 
-### Team Responsibilities
-| Developer | Area |
-|---|---|
-| Dev 1 | Frontend â€” Citizen Portal |
-| Dev 2 | Frontend â€” Officer Dashboard |
-| Dev 3 | Backend â€” API, AI Service, Priority Engine |
-| Dev 4 | Backend â€” Database, Auth, File Upload |
-
 ---
 
-## Security Note
+## 10. Disclaimer
 
-- **Never commit `.env` or any file containing real API keys, passwords, or tokens.**
-- `.gitignore` excludes all `.env.*` except `.env.example`.
-- Uploaded citizen photos must be validated server-side and stored outside the web root.
-- All sensitive API endpoints require valid JWT authentication.
-- File type and size limits must be enforced server-side (not only client-side).
-
----
-
-## Future Scope
-
-- Multi-category civic issue support (Water, Roads, Lighting, Hazards, Stray Animals)
-- Mobile-first Progressive Web App (PWA)
-- Bulk resource scheduling across zones
-- Historical analytics dashboard for the municipal council
-- Real-time WebSocket status updates for citizens
-- Integration with official Kopargaon Municipal Council data systems
-- Automated escalation for high-severity unresolved reports
-
----
-
-## Disclaimer
-
-> This is a **hackathon prototype** built to demonstrate AI-assisted civic management.
-> Where official Kopargaon Municipal Council data (zone boundaries, population counts, vehicle/staff inventory) is unavailable, **simulated demographic and resource data** representative of Kopargaon's scale may be used.
-> This platform is not affiliated with or endorsed by any government body.
+> **Hackathon Prototype Note:** This platform is designed as an MVP for demonstration purposes. Where official Kopargaon Municipal Council demographic counts, ward geometries, and vehicle inventories are unavailable, **simulated Kopargaon zone population and resource data** have been modeled to demonstrate realistic municipal operations.
